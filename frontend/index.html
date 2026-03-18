@@ -1,386 +1,357 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #4689cc; -webkit-text-stroke: #4689cc}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #cacaca; -webkit-text-stroke: #cacaca; min-height: 14.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #cacaca; -webkit-text-stroke: #cacaca}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #c27e65; -webkit-text-stroke: #c27e65}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #cdad6a; -webkit-text-stroke: #cdad6a}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Menlo; color: #598a43; -webkit-text-stroke: #598a43}
-    span.s1 {font-kerning: none; color: #6d6d6d; background-color: #171717; -webkit-text-stroke: 0px #6d6d6d}
-    span.s2 {font-kerning: none; background-color: #171717}
-    span.s3 {font-kerning: none; color: #cacaca; background-color: #171717; -webkit-text-stroke: 0px #cacaca}
-    span.s4 {font-kerning: none; color: #8cd3fe; background-color: #171717; -webkit-text-stroke: 0px #8cd3fe}
-    span.s5 {font-kerning: none; color: #c27e65; background-color: #171717; -webkit-text-stroke: 0px #c27e65}
-    span.s6 {font-kerning: none}
-    span.s7 {font-kerning: none; color: #4689cc; background-color: #171717; -webkit-text-stroke: 0px #4689cc}
-    span.s8 {font-kerning: none; color: #a7c598; background-color: #171717; -webkit-text-stroke: 0px #a7c598}
-    span.s9 {font-kerning: none; color: #cdad6a; background-color: #171717; -webkit-text-stroke: 0px #cdad6a}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pennymac TRE Stock Mover Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0f1117;
+      color: #222a35;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #f8fafc;
+    }
+
+    .header h1 span {
+      color: #38bdf8;
+    }
+
+    .header p {
+      margin-top: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .watchlist {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .watchlist-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 14px;
+      padding: 1.4rem;
+      border: 1px solid #334155;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Color */
+    .card.gain {
+      border-left: 4px solid #22c55e;
+    }
+
+    .card.loss {
+      border-left: 4px solid #ef4444;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .ticker {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f8fafc;
+      letter-spacing: -0.5px;
+    }
+
+    .date {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+
+    .pct-badge {
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .pct-badge.gain {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .pct-badge.loss {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .close-price {
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .close-price strong {
+      color: #cbd5e1;
+    }
+
+    .ai-section {
+      background: #0f1117;
+      border-radius: 8px;
+      padding: 0.85rem;
+      border: 1px solid #1e293b;
+    }
+
+    .ai-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #38bdf8;
+      margin-bottom: 0.4rem;
+    }
+
+    .ai-text {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+
+    .state-container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #334155;
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .state-title {
+      font-size: 1rem;
+      color: #94a3b8;
+    }
+
+    .error-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #334155;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .ticker {
+        font-size: 1.3rem;
+      }
+    }
   </style>
 </head>
+
 <body>
-<p class="p1"><span class="s1">&lt;!</span><span class="s2">DOCTYPE</span><span class="s3"> </span><span class="s4">html</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">html</span><span class="s3"> </span><span class="s4">lang</span><span class="s3">=</span><span class="s5">"en"</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">head</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">meta</span><span class="s2"> </span><span class="s4">charset</span><span class="s2">=</span><span class="s5">"UTF-8"</span><span class="s2"> </span><span class="s1">/&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">meta</span><span class="s3"> </span><span class="s4">name</span><span class="s3">=</span><span class="s2">"viewport"</span><span class="s3"> </span><span class="s4">content</span><span class="s3">=</span><span class="s2">"width=device-width, initial-scale=1.0"</span><span class="s3"> </span><span class="s1">/&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">title</span><span class="s1">&gt;</span><span class="s2">Pennymac TRE Stock Mover Dashboard</span><span class="s1">&lt;/</span><span class="s7">title</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s2">style</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">*</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s8">0</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">0</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">box-sizing</span><span class="s2">: border-box;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">body</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-family</span><span class="s2">: -apple-system, BlinkMacSystemFont, </span><span class="s5">"Segoe UI"</span><span class="s2">, Roboto, sans-serif;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background-color</span><span class="s2">: #0f1117;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #222a35;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">min-height</span><span class="s2">: </span><span class="s8">100vh</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">2rem</span><span class="s2"> </span><span class="s8">1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.header</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">text-align</span><span class="s2">: center;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-bottom</span><span class="s2">: </span><span class="s8">2.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.header</span><span class="s2"> </span><span class="s9">h1</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">2rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-weight</span><span class="s2">: </span><span class="s8">700</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">letter-spacing</span><span class="s2">: </span><span class="s8">-0.5px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #f8fafc;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.header</span><span class="s3"> </span><span class="s2">h1</span><span class="s3"> </span><span class="s2">span</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #38bdf8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.header</span><span class="s2"> </span><span class="s9">p</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-top</span><span class="s2">: </span><span class="s8">0.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #94a3b8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.95rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.watchlist</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-top</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">display</span><span class="s2">: flex;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">justify-content</span><span class="s2">: center;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">flex-wrap</span><span class="s2">: wrap;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">gap</span><span class="s2">: </span><span class="s8">0.4rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.watchlist-badge</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background</span><span class="s2">: #1e293b;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border</span><span class="s2">: </span><span class="s8">1px</span><span class="s2"> solid #334155;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #94a3b8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">0.2rem</span><span class="s2"> </span><span class="s8">0.6rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-radius</span><span class="s2">: </span><span class="s8">999px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-weight</span><span class="s2">: </span><span class="s8">500</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.grid</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">max-width</span><span class="s2">: </span><span class="s8">900px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s8">0</span><span class="s2"> auto;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">display</span><span class="s2">: grid;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">grid-template-columns</span><span class="s2">: repeat(auto-fill, minmax(</span><span class="s8">280px</span><span class="s2">, </span><span class="s8">1fr</span><span class="s2">));</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">gap</span><span class="s2">: </span><span class="s8">1.25rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.card</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background</span><span class="s2">: #1e293b;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-radius</span><span class="s2">: </span><span class="s8">14px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">1.4rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border</span><span class="s2">: </span><span class="s8">1px</span><span class="s2"> solid #334155;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">transition</span><span class="s2">: transform </span><span class="s8">0.15s</span><span class="s2"> ease, box-shadow </span><span class="s8">0.15s</span><span class="s2"> ease;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">position</span><span class="s2">: relative;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">overflow</span><span class="s2">: hidden;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.card:hover</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">transform</span><span class="s2">: translateY(</span><span class="s8">-3px</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">box-shadow</span><span class="s2">: </span><span class="s8">0</span><span class="s2"> </span><span class="s8">8px</span><span class="s2"> </span><span class="s8">30px</span><span class="s2"> rgba(</span><span class="s8">0</span><span class="s2">, </span><span class="s8">0</span><span class="s2">, </span><span class="s8">0</span><span class="s2">, </span><span class="s8">0.4</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">/* Color */</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.card.gain</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-left</span><span class="s2">: </span><span class="s8">4px</span><span class="s2"> solid #22c55e;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.card.loss</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-left</span><span class="s2">: </span><span class="s8">4px</span><span class="s2"> solid #ef4444;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.card-top</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">display</span><span class="s2">: flex;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">justify-content</span><span class="s2">: space-between;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">align-items</span><span class="s2">: flex-start;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-bottom</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.ticker</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">1.6rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-weight</span><span class="s2">: </span><span class="s8">800</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #f8fafc;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">letter-spacing</span><span class="s2">: </span><span class="s8">-0.5px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.date</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #64748b;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-top</span><span class="s2">: </span><span class="s8">0.2rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.pct-badge</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">1.1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-weight</span><span class="s2">: </span><span class="s8">700</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">0.3rem</span><span class="s2"> </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-radius</span><span class="s2">: </span><span class="s8">8px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">white-space</span><span class="s2">: nowrap;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.pct-badge.gain</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background</span><span class="s2">: rgba(</span><span class="s8">34</span><span class="s2">, </span><span class="s8">197</span><span class="s2">, </span><span class="s8">94</span><span class="s2">, </span><span class="s8">0.15</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #22c55e;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.pct-badge.loss</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background</span><span class="s2">: rgba(</span><span class="s8">239</span><span class="s2">, </span><span class="s8">68</span><span class="s2">, </span><span class="s8">68</span><span class="s2">, </span><span class="s8">0.15</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #ef4444;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.price-row</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">display</span><span class="s2">: flex;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">align-items</span><span class="s2">: center;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">gap</span><span class="s2">: </span><span class="s8">0.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-bottom</span><span class="s2">: </span><span class="s8">1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.close-price</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.9rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #94a3b8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.close-price</span><span class="s3"> </span><span class="s2">strong</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #cbd5e1;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.ai-section</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">background</span><span class="s2">: #0f1117;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-radius</span><span class="s2">: </span><span class="s8">8px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">0.85rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border</span><span class="s2">: </span><span class="s8">1px</span><span class="s2"> solid #1e293b;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.ai-label</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.65rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-weight</span><span class="s2">: </span><span class="s8">700</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">letter-spacing</span><span class="s2">: </span><span class="s8">1px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">text-transform</span><span class="s2">: uppercase;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #38bdf8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-bottom</span><span class="s2">: </span><span class="s8">0.4rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.ai-text</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.82rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #94a3b8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">line-height</span><span class="s2">: </span><span class="s8">1.55</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.state-container</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">max-width</span><span class="s2">: </span><span class="s8">900px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s8">0</span><span class="s2"> auto;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">text-align</span><span class="s2">: center;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">padding</span><span class="s2">: </span><span class="s8">4rem</span><span class="s2"> </span><span class="s8">1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.spinner</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">width</span><span class="s2">: </span><span class="s8">40px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">height</span><span class="s2">: </span><span class="s8">40px</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border</span><span class="s2">: </span><span class="s8">3px</span><span class="s2"> solid #334155;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-top-color</span><span class="s2">: #38bdf8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">border-radius</span><span class="s2">: </span><span class="s8">50%</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">animation</span><span class="s2">: spin </span><span class="s8">0.8s</span><span class="s2"> linear infinite;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin</span><span class="s2">: </span><span class="s8">0</span><span class="s2"> auto </span><span class="s8">1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">@keyframes</span><span class="s2"> </span><span class="s4">spin</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>to {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s4">transform</span><span class="s2">: rotate(</span><span class="s8">360deg</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.state-title</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">1rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #94a3b8;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p5"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">.error-icon</span><span class="s3"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">2.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-bottom</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.error-msg</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #ef4444;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.9rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-top</span><span class="s2">: </span><span class="s8">0.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s9">.footer</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">text-align</span><span class="s2">: center;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">margin-top</span><span class="s2">: </span><span class="s8">3rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">color</span><span class="s2">: #334155;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">0.75rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">@media</span><span class="s2"> (</span><span class="s4">max-width</span><span class="s2">: </span><span class="s8">480px</span><span class="s2">) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s9">.header</span><span class="s2"> </span><span class="s9">h1</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">1.5rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s9">.ticker</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s4">font-size</span><span class="s2">: </span><span class="s8">1.3rem</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;/</span><span class="s2">style</span><span class="s1">&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">head</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p1"><span class="s1">&lt;</span><span class="s2">body</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"header"</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;</span><span class="s7">h1</span><span class="s1">&gt;</span><span class="s2">TRE </span><span class="s1">&lt;</span><span class="s7">span</span><span class="s1">&gt;</span><span class="s2">Stock Mover</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span><span class="s2"> Dashboard</span><span class="s1">&lt;/</span><span class="s7">h1</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;</span><span class="s7">p</span><span class="s1">&gt;</span><span class="s2">The single biggest mover from our watchlist — updated daily after market close.</span><span class="s1">&lt;/</span><span class="s7">p</span><span class="s1">&gt;</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;</span><span class="s7">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"watchlist"</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">AAPL</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">MSFT</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">GOOGL</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">AMZN</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">TSLA</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;</span><span class="s7">span</span><span class="s2"> </span><span class="s4">class</span><span class="s2">=</span><span class="s5">"watchlist-badge"</span><span class="s1">&gt;</span><span class="s2">NVDA</span><span class="s1">&lt;/</span><span class="s7">span</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;/</span><span class="s7">div</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;/</span><span class="s7">div</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">div</span><span class="s2"> </span><span class="s4">id</span><span class="s2">=</span><span class="s5">"app"</span><span class="s1">&gt;&lt;/</span><span class="s7">div</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s7">div</span><span class="s3"> </span><span class="s4">class</span><span class="s3">=</span><span class="s2">"footer"</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">&lt;</span><span class="s7">p</span><span class="s1">&gt;</span><span class="s2">Powered by AWS Lambda · DynamoDB · API Gateway · Claude AI</span><span class="s1">&lt;/</span><span class="s7">p</span><span class="s1">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;/</span><span class="s7">div</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;</span><span class="s2">script</span><span class="s1">&gt;</span></p>
-<p class="p6"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s2">// Replace URL after Terraform deploys</span></p>
-<p class="p4"><span class="s3"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s3"> API_URL = </span><span class="s2">"REPLACE_WITH_YOUR_API_GATEWAY_URL"</span><span class="s3">;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> formatDate(dateStr) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> [year, month, day] = dateStr.split(</span><span class="s5">"-"</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> date = </span><span class="s7">new</span><span class="s2"> Date(year, month - </span><span class="s8">1</span><span class="s2">, day);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">return</span><span class="s2"> date.toLocaleDateString(</span><span class="s5">"en-US"</span><span class="s2">, {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>weekday: </span><span class="s5">"short"</span><span class="s2">,</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>month: </span><span class="s5">"short"</span><span class="s2">,</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>day: </span><span class="s5">"numeric"</span><span class="s2">,</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>year: </span><span class="s5">"numeric"</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> buildCard(mover) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> isGain = mover.pct_change &gt;= </span><span class="s8">0</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> colorClass = isGain ? </span><span class="s5">"gain"</span><span class="s2"> : </span><span class="s5">"loss"</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> arrow = isGain ? </span><span class="s5">"▲"</span><span class="s2"> : </span><span class="s5">"▼"</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> pctDisplay = </span><span class="s5">`</span><span class="s7">${</span><span class="s2">arrow</span><span class="s7">}</span><span class="s5"> </span><span class="s7">${</span><span class="s2">Math.abs(mover.pct_change).toFixed(</span><span class="s8">2</span><span class="s2">)</span><span class="s7">}</span><span class="s5">%`</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> summary = mover.ai_summary || </span><span class="s5">"No summary available."</span><span class="s2">;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">return</span><span class="s2"> </span><span class="s5">`</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;div class="card </span><span class="s7">${</span><span class="s3">colorClass</span><span class="s7">}</span><span class="s2">"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="card-top"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div class="ticker"&gt;</span><span class="s7">${</span><span class="s3">mover.ticker</span><span class="s7">}</span><span class="s2">&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div class="date"&gt;</span><span class="s7">${</span><span class="s3">formatDate(mover.date)</span><span class="s7">}</span><span class="s2">&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;div class="pct-badge </span><span class="s7">${</span><span class="s3">colorClass</span><span class="s7">}</span><span class="s2">"&gt;</span><span class="s7">${</span><span class="s3">pctDisplay</span><span class="s7">}</span><span class="s2">&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="price-row"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;span class="close-price"&gt;Closing price: &lt;strong&gt;$</span><span class="s7">${</span><span class="s3">mover.close_price.toFixed(</span><span class="s8">2</span><span class="s3">)</span><span class="s7">}</span><span class="s2">&lt;/strong&gt;&lt;/span&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="ai-section"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;div class="ai-label"&gt;✦ AI Summary&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span>&lt;div class="ai-text"&gt;</span><span class="s7">${</span><span class="s3">summary</span><span class="s7">}</span><span class="s2">&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">      </span>`</span><span class="s3">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> showLoading() {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s5">"app"</span><span class="s2">).innerHTML = </span><span class="s5">`</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;div class="state-container"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="spinner"&gt;&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;p class="state-title"&gt;Fetching market data...&lt;/p&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">      </span>`</span><span class="s3">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> showError(message) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s5">"app"</span><span class="s2">).innerHTML = </span><span class="s5">`</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;div class="state-container"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="error-icon"&gt;⚠️&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;p class="state-title"&gt;Could not load data&lt;/p&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;p class="error-msg"&gt;</span><span class="s7">${</span><span class="s3">message</span><span class="s7">}</span><span class="s2">&lt;/p&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">      </span>`</span><span class="s3">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> showEmpty() {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s5">"app"</span><span class="s2">).innerHTML = </span><span class="s5">`</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;div class="state-container"&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div class="error-icon"&gt;📭&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>&lt;p class="state-title"&gt;No data yet — check back after market close today.&lt;/p&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">      </span>`</span><span class="s3">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s2"> showCards(movers) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> html = movers.map(buildCard).join(</span><span class="s5">""</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>document.getElementById(</span><span class="s5">"app"</span><span class="s2">).innerHTML = </span><span class="s5">`&lt;div class="grid"&gt;</span><span class="s7">${</span><span class="s2">html</span><span class="s7">}</span><span class="s5">&lt;/div&gt;`</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">async</span><span class="s2"> </span><span class="s7">function</span><span class="s2"> loadMovers() {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>showLoading();</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">try</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s2"> response = </span><span class="s7">await</span><span class="s2"> fetch(API_URL);</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s2"> (!response.ok) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s7">throw</span><span class="s2"> </span><span class="s7">new</span><span class="s2"> Error(</span><span class="s5">`API returned status </span><span class="s7">${</span><span class="s2">response.status</span><span class="s7">}</span><span class="s5">`</span><span class="s2">);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s2"> data = </span><span class="s7">await</span><span class="s2"> response.json();</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s2"> (!data.movers || data.movers.length === </span><span class="s8">0</span><span class="s2">) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span>showEmpty();</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s7">return</span><span class="s2">;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>showCards(data.movers);</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>} </span><span class="s7">catch</span><span class="s2"> (err) {</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>console.error(</span><span class="s5">"Failed to fetch movers:"</span><span class="s2">, err);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">                </span>showError(err.message);</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">        </span>loadMovers();</span></p>
-<p class="p1"><span class="s3"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;/</span><span class="s2">script</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">body</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s6"></span><br></p>
-<p class="p1"><span class="s1">&lt;/</span><span class="s2">html</span><span class="s1">&gt;</span></p>
+
+  <div class="header">
+    <h1>TRE <span>Stock Mover</span> Dashboard</h1>
+    <p>The single biggest mover from our watchlist — updated daily after market close.</p>
+    <div class="watchlist">
+      <span class="watchlist-badge">AAPL</span>
+      <span class="watchlist-badge">MSFT</span>
+      <span class="watchlist-badge">GOOGL</span>
+      <span class="watchlist-badge">AMZN</span>
+      <span class="watchlist-badge">TSLA</span>
+      <span class="watchlist-badge">NVDA</span>
+    </div>
+  </div>
+
+  <div id="app"></div>
+
+  <div class="footer">
+    <p>Powered by AWS Lambda · DynamoDB · API Gateway · Claude AI</p>
+  </div>
+
+  <script>
+    // Replace URL after Terraform deploys
+    const API_URL = "REPLACE_WITH_YOUR_API_GATEWAY_URL";
+
+    function formatDate(dateStr) {
+      const [year, month, day] = dateStr.split("-");
+      const date = new Date(year, month - 1, day);
+      return date.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function buildCard(mover) {
+      const isGain = mover.pct_change >= 0;
+      const colorClass = isGain ? "gain" : "loss";
+      const arrow = isGain ? "▲" : "▼";
+      const pctDisplay = `${arrow} ${Math.abs(mover.pct_change).toFixed(2)}%`;
+      const summary = mover.ai_summary || "No summary available.";
+
+      return `
+        <div class="card ${colorClass}">
+          <div class="card-top">
+            <div>
+              <div class="ticker">${mover.ticker}</div>
+              <div class="date">${formatDate(mover.date)}</div>
+            </div>
+            <div class="pct-badge ${colorClass}">${pctDisplay}</div>
+          </div>
+
+          <div class="price-row">
+            <span class="close-price">Closing price: <strong>$${mover.close_price.toFixed(2)}</strong></span>
+          </div>
+
+          <div class="ai-section">
+            <div class="ai-label">✦ AI Summary</div>
+            <div class="ai-text">${summary}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function showLoading() {
+      document.getElementById("app").innerHTML = `
+        <div class="state-container">
+          <div class="spinner"></div>
+          <p class="state-title">Fetching market data...</p>
+        </div>
+      `;
+    }
+
+    function showError(message) {
+      document.getElementById("app").innerHTML = `
+        <div class="state-container">
+          <div class="error-icon">⚠️</div>
+          <p class="state-title">Could not load data</p>
+          <p class="error-msg">${message}</p>
+        </div>
+      `;
+    }
+
+    function showEmpty() {
+      document.getElementById("app").innerHTML = `
+        <div class="state-container">
+          <div class="error-icon">📭</div>
+          <p class="state-title">No data yet — check back after market close today.</p>
+        </div>
+      `;
+    }
+
+    function showCards(movers) {
+      const html = movers.map(buildCard).join("");
+      document.getElementById("app").innerHTML = `<div class="grid">${html}</div>`;
+    }
+
+    async function loadMovers() {
+      showLoading();
+
+      try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+          throw new Error(`API returned status ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.movers || data.movers.length === 0) {
+          showEmpty();
+          return;
+        }
+
+        showCards(data.movers);
+
+      } catch (err) {
+        console.error("Failed to fetch movers:", err);
+        showError(err.message);
+      }
+    }
+
+    loadMovers();
+  </script>
+
 </body>
+
 </html>

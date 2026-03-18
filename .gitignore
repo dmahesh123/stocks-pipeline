@@ -15,3 +15,6 @@ venv/
 
 # Mac
 .DS_Store
+
+# Terraform secrets
+terraform/terraform.tfvars

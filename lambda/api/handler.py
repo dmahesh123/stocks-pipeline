@@ -43,7 +43,7 @@ def lambda_handler(event, context):
                     "ticker": item["ticker"],
                     "percent_change": float(item["percent_change"]),
                     "close_price": float(item["close_price"]),
-                    # "ai_summary": item.get("ai_summary", "")
+                    "ai_summary": item.get("ai_summary", "")
                 })
 
             movers.sort(key=lambda x: x["date"], reverse=True)

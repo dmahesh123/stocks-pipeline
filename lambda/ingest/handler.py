@@ -11,10 +11,13 @@ MASSIVE_BASE = "https://api.massive.com/v2/aggs/ticker"
 ANTHROPIC_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_MODEL = "claude-3-5-haiku-20241022"
 
-dynamodb = boto3.resource("dynamodb", region_name=os.environ["AWS_REGION_NAME"])
+dynamodb = boto3.resource(
+    "dynamodb", region_name=os.environ["AWS_REGION_NAME"])
 table = dynamodb.Table(os.environ["DYNAMODB_TABLE"])
 
 # get the stock data
+
+
 def get_stock_data(ticker, date_str, api_key):
 
     url = f"{MASSIVE_BASE}/{ticker}/range/1/day/{date_str}/{date_str}?apiKey={api_key}"
@@ -22,7 +25,7 @@ def get_stock_data(ticker, date_str, api_key):
     req = urllib.request.Request(url)
     with urllib.request.urlopen(req, timeout=10) as response:
         data = json.loads(response.read().decode())
-    
+
     # handle exception when market is closed
     if data.get("status") != "OK" or not data.get("results"):
         return None
@@ -31,8 +34,43 @@ def get_stock_data(ticker, date_str, api_key):
     return float(result["o"]), float(result["c"])
 
 
+def get_ai_summary(ticker, percent_change, close_price, all_results, anthrophic_key):
+    direction = "gained" if percent_change > 0 else "dropped"
+    abs_change = abs(round(percent_change, 2))
+
+    others = ", ".join(
+        f"{t}: {round(p, 2):+.2f}%"
+        for t, p in all_results.items()
+        if t != ticker
+    )
+
+    prompt = (f"You are a brief financial analyst. Today's top mover from a watchlist of 6 texh stocks (AAPLE, MSFT, GOOGLE, AMZN, TSLA, NVDA) was {ticker}, which {direction} {abs_change}% closing at ${round(close_price, 2)}. The other stocks today: {others}. "
+              f"Write exactly 2 sentences summarizing this in plain english for a non-expert. Do not use bullet points. Do not mention that you are an AI. Do not go off topic.")
+
+    body = json.dumps({
+        "model": ANTHROPIC_MODEL,
+        "max_tokens": 120,
+        "messages": [{"role": "user", "content": prompt}]
+    }).encode()
+
+    req = urllib.request.Request(
+        ANTHROPIC_URL,
+        data=body,
+        headers={
+            "Content-Type": "application/json",
+            "x-api-key": anthrophic_key,
+            "anthropic-version": "2023-06-01"
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=15) as response:
+        data = json.loads(response.read().decode())
+
+    return data["content"][0]["text"].strip()
+
+
 def calculate_stock_percent_change(open_price, close_price):
-    #((Close - Open) / Open) * 100
+    # ((Close - Open) / Open) * 100
 
     return ((close_price - open_price)/open_price) * 100
 
@@ -53,12 +91,16 @@ def lambda_handler(event, context):
             prices = get_stock_data(ticker, today, massive_key)
 
             if prices is None:
-                print("[INFO] {ticker}: No data, likely due to market being closed.")
+                print(
+                    "[INFO] {ticker}: No data, likely due to market being closed.")
                 continue
             open_price, close_price = prices
-            percent_change = calculate_stock_percent_change(open_price, close_price)
-            results[ticker] = {"percent_change": percent_change, "close": close_price}
-            print(f"[INFO] {ticker}: open={open_price}, close={close_price}, change={round(percent_change, 2)}%")
+            percent_change = calculate_stock_percent_change(
+                open_price, close_price)
+            results[ticker] = {
+                "percent_change": percent_change, "close": close_price}
+            print(
+                f"[INFO] {ticker}: open={open_price}, close={close_price}, change={round(percent_change, 2)}%")
 
         except urllib.error.HTTPError as e:
             print(f"[Error] HTTP error fetching {ticker}: {e.code} {e.reason}")
@@ -68,9 +110,10 @@ def lambda_handler(event, context):
             print(f"[Error] Unexpected error fetching {ticker}: {str(e)}")
 
     if not results:
-        print("[INFO] No stock data received, likely due to market being closed. Exiting")
+        print(
+            "[INFO] No stock data received, likely due to market being closed. Exiting")
         return {"statusCode": 200, "body": "Market closed, nothing to record."}
-    
+
     top_ticker = max(results, key=lambda t: abs(results[t]["percent_change"]))
     top_percent = results[top_ticker]["percent_change"]
     top_close = results[top_ticker]["close"]
@@ -78,13 +121,24 @@ def lambda_handler(event, context):
     print(f"[Info] Top Mover: {top_ticker} at {round(top_percent, 2)}%")
 
     # ai summary
+    ai_summary = "Summary unavailable."
+
+    try:
+        percent_change_map = {t: v["percent_change"]
+                              for t, v in results.items()}
+        ai_summary = get_ai_summary(
+            top_ticker, top_percent, top_close, percent_change_map, anthropic_key)
+        print(f"[INFO] AI summary Generated: {ai_summary}")
+    except Exception as e:
+        print(f"[Error] AI summary failed: {str(e)}")
+
     try:
         table.put_items(Item={
             "date": today,
             "ticker": top_ticker,
             "percent_change": Decimal(str(round(top_percent, 4))),
             "close_price": Decimal(str(round(close_price, 4))),
-            # "ai_summary": ai_summary
+            "ai_summary": ai_summary
         })
         print(f"[INFO] Successfully Saved to DynamoDB.")
     except Exception as e:
@@ -97,15 +151,7 @@ def lambda_handler(event, context):
             "date": today,
             "top_mover": top_ticker,
             "percent_change": round(top_percent, 4),
-            close_price: round(top_close, 4)
-            # "ai_summary": ai_summary
+            "close_price": round(top_close, 4),
+            "ai_summary": ai_summary
         })
     }
-
-            
-    
-
-
-# def get_ai_summary(ticker, percent_change, close_price, all_results, anthrophic_key):
-    
-#     # work on later, need prompt
